@@ -7,6 +7,9 @@ Show NEWs and allow user to save favorite news
 Technology used:
 ===============
 1.MVVM
+
 2.ROOM
+
 3.NEWS REST API(https://newsapi.org/)
+
 4.Livedata
