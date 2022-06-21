@@ -1,26 +1,20 @@
-package com.androiddevs.mvvmnewsapp.adapter
+package com.androiddevs.mvvmnewsapp.ui.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.androiddevs.mvvmnewsapp.R
+import com.androiddevs.mvvmnewsapp.databinding.ItemArticlePreviewBinding
 import com.androiddevs.mvvmnewsapp.model.dataClass.Article
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.item_article_preview.view.*
 
 class NewsAdapter :RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 
-    inner class ArticleViewHolder(itemView:View):RecyclerView.ViewHolder(itemView)
+    inner class ArticleViewHolder(val binding:ItemArticlePreviewBinding):RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
-       return ArticleViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_article_preview,
-               parent,
-               false
-           )
-       )
+        return ArticleViewHolder(ItemArticlePreviewBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
     override fun getItemCount(): Int {
         return differ.currentList.size
@@ -29,28 +23,24 @@ class NewsAdapter :RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
      val article=differ.currentList[position]
-        holder.itemView.apply {
-            Glide.with(this).load(article.urlToImage).into(ivArticleImage)
+
+        holder.binding.apply {
+            Glide.with(ivArticleImage.context).load(article.urlToImage).into(ivArticleImage)
             tvSource.text=article.source?.name
             tvTitle.text=article.title
             tvDescription.text=article.description
             tvPublishedAt.text=article.publishedAt
-
-            setOnClickListener{
-                onItemClickListener?.let { it(article) }
-            }
+        }
+        holder.itemView. setOnClickListener{
+            onItemClickListener?.let { it(article) }
         }
     }
-    //////////////////////////////////////////////////////////////////////
     //not understand it its for click on view
     private var onItemClickListener:((Article)->Unit)?=null
     fun SetOnItemClickListener(listener:(Article)->Unit){
         onItemClickListener=listener
     }
 
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // util to see only change in articles to refresh it only not like we give list and we refresh all list
     private val differCallBack = object : DiffUtil.ItemCallback<Article>(){
         override fun areItemsTheSame(oldItem: Article,newItem:Article):Boolean{

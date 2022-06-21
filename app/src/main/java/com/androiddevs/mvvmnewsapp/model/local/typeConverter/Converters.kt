@@ -5,7 +5,7 @@ import com.androiddevs.mvvmnewsapp.model.dataClass.Source
 
 class Converters {
     @TypeConverter
-    fun fromSource(source: Source):String{
+    fun fromSource(source: Source):String?{
         return source.name
     }
     @TypeConverter

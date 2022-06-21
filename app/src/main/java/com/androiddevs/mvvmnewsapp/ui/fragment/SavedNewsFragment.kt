@@ -1,28 +1,42 @@
 package com.androiddevs.mvvmnewsapp.ui.fragment
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.androiddevs.mvvmnewsapp.R
-import com.androiddevs.mvvmnewsapp.adapter.NewsAdapter
-import com.androiddevs.mvvmnewsapp.ui.activity.NewsActivity
-import com.androiddevs.mvvmnewsapp.ui.activity.NewsViewModel
+import com.androiddevs.mvvmnewsapp.ui.adapter.NewsAdapter
+import com.androiddevs.mvvmnewsapp.databinding.FragmentSavedNewsBinding
+import com.androiddevs.mvvmnewsapp.ui.viewModel.NewsViewModel
+import com.androiddevs.mvvmnewsapp.ui.viewModel.SavedNewsFragmentViewModel
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_breaking_news.*
-import kotlinx.android.synthetic.main.fragment_saved_news.*
+import dagger.hilt.android.AndroidEntryPoint
 
-class SavedNewsFragment:Fragment(R.layout.fragment_saved_news){
-    lateinit var viewModel: NewsViewModel
+@AndroidEntryPoint
+class SavedNewsFragment:Fragment(){
+
+    private val viewModel: SavedNewsFragmentViewModel by viewModels()
+
     lateinit var newsAdapter: NewsAdapter
+    private lateinit var binding: FragmentSavedNewsBinding
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSavedNewsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel=(activity as NewsActivity).viewModel
         setupRecyclerView()
         newsAdapter.SetOnItemClickListener {
             val bundle=Bundle().apply {
@@ -56,7 +70,7 @@ class SavedNewsFragment:Fragment(R.layout.fragment_saved_news){
             }
         }
         ItemTouchHelper(itemTouchCallBack).apply {
-            attachToRecyclerView(rvSavedNews)
+            attachToRecyclerView(binding.rvSavedNews)
         }
         //get saved article
         viewModel.getSavedArticle().observe(viewLifecycleOwner, Observer { articles ->
@@ -67,7 +81,7 @@ class SavedNewsFragment:Fragment(R.layout.fragment_saved_news){
     }
     private fun setupRecyclerView(){
         newsAdapter = NewsAdapter()
-        rvSavedNews.apply {
+        binding. rvSavedNews.apply {
             adapter=newsAdapter
             layoutManager= LinearLayoutManager(activity)
         }

@@ -2,26 +2,41 @@ package com.androiddevs.mvvmnewsapp.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.androiddevs.mvvmnewsapp.R
-import com.androiddevs.mvvmnewsapp.model.local.ArticleDatabase
-import com.androiddevs.mvvmnewsapp.repository.NewsRepository
-import kotlinx.android.synthetic.main.activity_news.*
 
+import com.androiddevs.mvvmnewsapp.R
+import com.androiddevs.mvvmnewsapp.databinding.ActivityNewsBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
 class NewsActivity : AppCompatActivity() {
-lateinit var viewModel: NewsViewModel
+
+private lateinit var binding: ActivityNewsBinding
+private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_news)
-        val newsRepository= NewsRepository(ArticleDatabase(this))
-        val viewModelProviderFactory = NewsViewModelProviderFactory(application,newsRepository)
-        viewModel=ViewModelProvider(this,viewModelProviderFactory).get(NewsViewModel::class.java)
-        bottomNavigationView.setupWithNavController(newsNavHostFragment.findNavController())
+        binding=ActivityNewsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+        val navView: BottomNavigationView = binding.navView
+         navController = findNavController(R.id.newsNavHostFragment)
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.breakingNewsFragment, R.id.savedNewsFragment, R.id.searchNewsFragment
+            )
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
 
+    }
 
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp()|| super.onSupportNavigateUp()
     }
 }
