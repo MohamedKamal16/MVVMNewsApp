@@ -46,7 +46,7 @@ object RemoteDataModule {
     @Singleton
     fun provideApiService(retrofit: Retrofit) = retrofit.create(NewsApi::class.java)
 
-/*    @Provides
+  /*  @Provides
     @Singleton
     fun provideApiHelper(apiHelper: ApiHelperImpl): ApiHelper = apiHelper*/
 

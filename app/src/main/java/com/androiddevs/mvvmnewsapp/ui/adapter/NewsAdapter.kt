@@ -5,11 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.androiddevs.mvvmnewsapp.R
 import com.androiddevs.mvvmnewsapp.databinding.ItemArticlePreviewBinding
 import com.androiddevs.mvvmnewsapp.model.dataClass.Article
 import com.bumptech.glide.Glide
 
-class NewsAdapter :RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
+class NewsAdapter() :RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 
     inner class ArticleViewHolder(val binding:ItemArticlePreviewBinding):RecyclerView.ViewHolder(binding.root)
 
@@ -25,12 +26,16 @@ class NewsAdapter :RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
      val article=differ.currentList[position]
 
         holder.binding.apply {
-            Glide.with(ivArticleImage.context).load(article.urlToImage).into(ivArticleImage)
+            if (article.urlToImage != null)
+               Glide.with(ivArticleImage.context).load(article.urlToImage).into(ivArticleImage)
+            else
+                Glide.with(ivArticleImage.context).load(R.drawable.ic_baseline_error_24).into(ivArticleImage)
+
             tvSource.text=article.source?.name
             tvTitle.text=article.title
-            tvDescription.text=article.description
             tvPublishedAt.text=article.publishedAt
         }
+
         holder.itemView. setOnClickListener{
             onItemClickListener?.let { it(article) }
         }
@@ -40,6 +45,8 @@ class NewsAdapter :RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
     fun SetOnItemClickListener(listener:(Article)->Unit){
         onItemClickListener=listener
     }
+
+
 
     // util to see only change in articles to refresh it only not like we give list and we refresh all list
     private val differCallBack = object : DiffUtil.ItemCallback<Article>(){

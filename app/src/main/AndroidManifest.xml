@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.activity.NewsActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:theme="@style/Theme.BankAccount_Task.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

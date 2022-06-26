@@ -1,5 +1,6 @@
 package com.androiddevs.mvvmnewsapp.ui.fragment
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,8 +17,10 @@ import com.androiddevs.mvvmnewsapp.R
 import com.androiddevs.mvvmnewsapp.ui.adapter.NewsAdapter
 import com.androiddevs.mvvmnewsapp.databinding.FragmentBreakingNewsBinding
 import com.androiddevs.mvvmnewsapp.ui.viewModel.NewsViewModel
+import com.androiddevs.mvvmnewsapp.util.Constant
 import com.androiddevs.mvvmnewsapp.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class BreakingNewsFragment : Fragment() {
@@ -26,12 +29,18 @@ class BreakingNewsFragment : Fragment() {
     private lateinit var newsAdapter: NewsAdapter
     private lateinit var binding: FragmentBreakingNewsBinding
 
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
+
+     var countryCode:String?=null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentBreakingNewsBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -40,7 +49,42 @@ class BreakingNewsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
+        with(binding) {
+            tvPageName.text = getString(R.string.news)//TODO change Name with category
+            back.setOnClickListener {
+                findNavController().popBackStack()
+            }
+            Setting.setOnClickListener {
+                //TODO
+            }
+        }
         //on click save article in bundle in byte(serialization) to pass it to article fragment
+        clickOnArticle()
+
+    }
+
+
+    override fun onResume() {
+         super.onResume()
+        countryCode = sharedPreferences.getString(Constant.COUNTRY_NAME_ISO, "us")
+        viewModel.getBreakNews(countryCode)
+        //observer
+        observeNews()
+     }
+
+
+    //hide and show progressBar
+    private fun hideProgressBar() {
+        binding.shimmerContainer.visibility = View.GONE
+        isLoading = false
+    }
+    private fun showProgressBar() {
+        binding.shimmerContainer.visibility = View.VISIBLE
+        //  binding.paginationProgressBar.visibility = View.VISIBLE
+        isLoading = true
+    }
+
+    private fun clickOnArticle() {
         newsAdapter.SetOnItemClickListener {
             val bundle = Bundle().apply {
                 putSerializable("article", it)
@@ -49,12 +93,15 @@ class BreakingNewsFragment : Fragment() {
                 R.id.action_breakingNewsFragment_to_articleFragment, bundle
             )
         }
-        //observer
+    }
+
+    private fun observeNews() {
         viewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
                     response.data?.let { newsResponse ->
+
                         newsAdapter.differ.submitList(newsResponse.articles?.toList())
 
                         if (newsResponse.totalResults != null) {
@@ -81,19 +128,6 @@ class BreakingNewsFragment : Fragment() {
         })
     }
 
-    //hide and show progressBar
-    private fun hideProgressBar() {
-        binding.paginationProgressBar.visibility = View.INVISIBLE
-        isLoading = false
-    }
-
-    private fun showProgressBar() {
-        binding.paginationProgressBar.visibility = View.VISIBLE
-        isLoading = true
-    }
-
-
-
     var isLoading = false
     var isLastPage = false
     var isScrolling = false
@@ -105,7 +139,6 @@ class BreakingNewsFragment : Fragment() {
                 isScrolling = true
             }
         }
-
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             val layoutManager = recyclerView.layoutManager as LinearLayoutManager
@@ -122,11 +155,10 @@ class BreakingNewsFragment : Fragment() {
                     && isTotalMoreThanVisible && isScrolling
 
             if (shouldPaginate) {
-                viewModel.getBreakNews("us")
+                viewModel.getBreakNews(countryCode)
                 isScrolling = false
             }
         }
-
     }
 
 
@@ -138,4 +170,8 @@ class BreakingNewsFragment : Fragment() {
             addOnScrollListener(this@BreakingNewsFragment.scrollListner)
         }
     }
+
+
 }
+
+

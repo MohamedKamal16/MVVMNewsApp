@@ -1,0 +1,19 @@
+<com.facebook.shimmer.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:shimmer_auto_start="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/item_article_preview" />
+        <include layout="@layout/item_article_preview" />
+        <include layout="@layout/item_article_preview" />
+
+
+        <!-- repeat until it's enough to fill the screen -->
+    </LinearLayout>
+</com.facebook.shimmer.ShimmerFrameLayout>
