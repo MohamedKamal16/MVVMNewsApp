@@ -1,6 +1,7 @@
 package com.androiddevs.mvvmnewsapp.ui.viewModel
 
 import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
 import android.net.ConnectivityManager.*
 import android.net.NetworkCapabilities.*
@@ -9,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.androiddevs.mvvmnewsapp.model.dataClass.Article
 import com.androiddevs.mvvmnewsapp.model.dataClass.NewsResponse
 import com.androiddevs.mvvmnewsapp.repository.NewsRepository
+import com.androiddevs.mvvmnewsapp.util.Constant
 import com.androiddevs.mvvmnewsapp.util.Constant.COUNTRY_NAME_ISO
 import com.androiddevs.mvvmnewsapp.util.NetworkCheck.hasInternetConnection
 import com.androiddevs.mvvmnewsapp.util.Resource
@@ -31,8 +33,8 @@ class NewsViewModel @Inject constructor(
 
 
 
-    fun getBreakNews(countryCode:String?) = viewModelScope.launch {
-        safeBrakingNewsCall(countryCode)
+    fun getBreakNews(context: Context) = viewModelScope.launch {
+        safeBrakingNewsCall(Constant.getCountryCode(context))
     }
 
 

@@ -1,30 +1,28 @@
 package com.androiddevs.mvvmnewsapp.ui.fragment
 
-import android.content.Context
-import android.content.ContextWrapper
+
 import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.os.Bundle
-import android.os.LocaleList
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.androiddevs.mvvmnewsapp.R
 import com.androiddevs.mvvmnewsapp.databinding.SettingFragmentBinding
 import com.androiddevs.mvvmnewsapp.ui.activity.NewsActivity
 import com.androiddevs.mvvmnewsapp.ui.adapter.CountryAdapter
-import com.androiddevs.mvvmnewsapp.ui.adapter.NewsAdapter
-import com.androiddevs.mvvmnewsapp.util.Constant.CHOOSE_LANGUAGE
+import com.androiddevs.mvvmnewsapp.ui.viewModel.SettingViewModel
 import com.androiddevs.mvvmnewsapp.util.Constant.countryList
-import com.androiddevs.mvvmnewsapp.util.LanguageConfig.setLocate
+import com.androiddevs.mvvmnewsapp.util.LocaleHelper.getLanguage
+import com.androiddevs.mvvmnewsapp.util.LocaleHelper.getSharedPreference
+import com.androiddevs.mvvmnewsapp.util.LocaleHelper.setLocale
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -40,9 +38,9 @@ class SettingFragment : Fragment() {
     private lateinit var rec: RecyclerView
     private lateinit var alertDialog: AlertDialog
 
+    private val viewModel:SettingViewModel by viewModels()
 
-    @Inject
-    lateinit var sharedPreferences:SharedPreferences
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,56 +53,75 @@ class SettingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnLanguage.setOnClickListener {
-            showChangeLang()
+        with(binding){
+            tvPageName.text=getString(R.string.settings)
+            back.setOnClickListener {
+                findNavController().popBackStack()
+            }
+            btnLanguage.setOnClickListener {
+                showChangeLang()
+            }
+            btnCatagory.setOnClickListener {
+                chooseCountry()
+            }
         }
-        binding.btnCatagory.setOnClickListener {
-            chooseCountry()
-        }
+
     }
 
-    private fun chooseCountry() {
-        val builder = AlertDialog.Builder(requireContext())
-        val layoutView = layoutInflater.inflate(R.layout.country_dialog, null)
-         rec=layoutView.findViewById(R.id.recCountry)
-        builder.setView(layoutView)
-        alertDialog=builder.create()
-        setupRecyclerView(alertDialog)
-        alertDialog.show()
-    }
 
-    private fun setupRecyclerView(dialog: AlertDialog) {
-        countryAdapter = CountryAdapter(countryList(),sharedPreferences, dialog)
-        rec.apply {
-            adapter = countryAdapter
-            layoutManager = LinearLayoutManager(activity)
-        }
-    }
+       private fun chooseCountry() {
+           val builder = AlertDialog.Builder(requireContext())
+           val layoutView = layoutInflater.inflate(R.layout.country_dialog, null)
+            rec=layoutView.findViewById(R.id.recCountry)
+           builder.setView(layoutView)
+           alertDialog=builder.create()
+           setupRecyclerView(alertDialog)
+           alertDialog.show()
+
+       }
+
+       private fun setupRecyclerView(dialog: AlertDialog) {
+           countryAdapter = CountryAdapter(countryList(),getSharedPreference(requireContext()), dialog,activity)
+           rec.apply {
+               adapter = countryAdapter
+               layoutManager = LinearLayoutManager(activity)
+           }
+       }
 
     private fun showChangeLang() {
         val listItems = arrayOf("English","عربي")
+        val lang=getLanguage(requireContext())
 
-        selectedLanguageIndex = sharedPreferences.getInt(CHOOSE_LANGUAGE,0)
-        Log.i("setting language", "showChangeLang: $selectedLanguageIndex")
+        selectedLanguageIndex = if (lang=="ar"){
+                                    1
+                                }else{
+                                    0
+                                }
 
         val mBuilder = AlertDialog.Builder(requireContext())
         mBuilder.setTitle(getString(R.string.chooselanguage))
 
         mBuilder.setSingleChoiceItems(listItems, selectedLanguageIndex) { dialog, index ->
-            val editor: SharedPreferences.Editor = sharedPreferences.edit()
-            editor.putInt(CHOOSE_LANGUAGE, index)
-            editor.apply()
-         if (index == 0) {
-                setLocate(requireContext(),"en")
-             (activity as NewsActivity).recreate()
-         } else if (index == 1) {
-                setLocate(requireContext(),"ar")
-             (activity as NewsActivity).recreate()
+            val lang =when(index){
+                0->"en"
+                1->"ar"
+                else->"en"
             }
+           setLocale(requireContext(),lang)
             dialog.dismiss()
+            refresh()
+
         }
         val mDialog = mBuilder.create()
         mDialog.show()
     }
 
+    fun refresh(){
+        val navController = requireActivity().findNavController(R.id.newsNavHostFragment)
+        navController.run {
+            popBackStack()
+            navigate(R.id.settingFragment)
+        }
+        (activity as NewsActivity).recreate()
+    }
 }

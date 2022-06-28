@@ -1,56 +1,42 @@
 package com.androiddevs.mvvmnewsapp.ui.activity
 
-import android.content.SharedPreferences
+import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.androiddevs.mvvmnewsapp.R
 import com.androiddevs.mvvmnewsapp.databinding.ActivityNewsBinding
-import com.androiddevs.mvvmnewsapp.util.Constant
-import com.androiddevs.mvvmnewsapp.util.LanguageConfig
+import com.androiddevs.mvvmnewsapp.ui.viewModel.SettingViewModel
+import com.androiddevs.mvvmnewsapp.util.LocaleHelper.onAttach
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class NewsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNewsBinding
     private lateinit var navController: NavController
-    @Inject
-    lateinit var sharedPreferences: SharedPreferences
 
+    private val viewModel: SettingViewModel by viewModels()
+    lateinit var navView: BottomNavigationView
     var index=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNewsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        navView = binding.navView
         navBind()
-
-        index=sharedPreferences.getInt(Constant.CHOOSE_LANGUAGE,0)
     }
 
-    override fun onResume() {
-        super.onResume()
-
-       // deafultLanguage()  TODO KEEP Setting Choice
-    }
-
-   /* private fun deafultLanguage() {
-        if (index == 0) {
-            LanguageConfig.setLocate(this, "en")
-        } else if (index == 1) {
-            LanguageConfig.setLocate(this, "ar")
-        }
-    }*/
 
 
     private fun navBind() {
-        val navView: BottomNavigationView = binding.navView
+
         navController = findNavController(R.id.newsNavHostFragment)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -60,6 +46,7 @@ class NewsActivity : AppCompatActivity() {
                 binding.navView.visibility = View.VISIBLE
             }
         }
+
         navView.setupWithNavController(navController)
     }
 
@@ -67,4 +54,9 @@ class NewsActivity : AppCompatActivity() {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(newBase?.let { onAttach(it) })
+
+    }
 }

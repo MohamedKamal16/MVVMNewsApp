@@ -1,27 +1,22 @@
 package com.androiddevs.mvvmnewsapp.repository
 
 
+import android.content.Context
 import android.content.SharedPreferences
 import com.androiddevs.mvvmnewsapp.model.dataClass.Article
 import com.androiddevs.mvvmnewsapp.model.local.ArticleDao
 import com.androiddevs.mvvmnewsapp.model.remote.NewsApi
-import com.androiddevs.mvvmnewsapp.util.Constant
 import javax.inject.Inject
 
 
 class NewsRepository @Inject constructor(
    private val articleDao: ArticleDao,
    private val api: NewsApi,
-   val sharedPreferences: SharedPreferences
     ) {
      private var countryCode:String?=null
 
     lateinit var Category:String
 
-    fun getCountry():String{
-         countryCode = sharedPreferences.getString(Constant.COUNTRY_NAME_ISO, "us")
-        return countryCode.toString()
-    }
 
 
     suspend fun getNews(country:String,category:String,pageNumber: Int)

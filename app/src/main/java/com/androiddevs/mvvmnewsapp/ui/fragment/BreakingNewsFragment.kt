@@ -18,6 +18,7 @@ import com.androiddevs.mvvmnewsapp.ui.adapter.NewsAdapter
 import com.androiddevs.mvvmnewsapp.databinding.FragmentBreakingNewsBinding
 import com.androiddevs.mvvmnewsapp.ui.viewModel.NewsViewModel
 import com.androiddevs.mvvmnewsapp.util.Constant
+import com.androiddevs.mvvmnewsapp.util.Constant.getCountryCode
 import com.androiddevs.mvvmnewsapp.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -29,10 +30,7 @@ class BreakingNewsFragment : Fragment() {
     private lateinit var newsAdapter: NewsAdapter
     private lateinit var binding: FragmentBreakingNewsBinding
 
-    @Inject
-    lateinit var sharedPreferences: SharedPreferences
 
-     var countryCode:String?=null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +38,6 @@ class BreakingNewsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentBreakingNewsBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -55,7 +52,7 @@ class BreakingNewsFragment : Fragment() {
                 findNavController().popBackStack()
             }
             Setting.setOnClickListener {
-                //TODO
+                findNavController().navigate(R.id.settingFragment)
             }
         }
         //on click save article in bundle in byte(serialization) to pass it to article fragment
@@ -66,8 +63,10 @@ class BreakingNewsFragment : Fragment() {
 
     override fun onResume() {
          super.onResume()
-        countryCode = sharedPreferences.getString(Constant.COUNTRY_NAME_ISO, "us")
-        viewModel.getBreakNews(countryCode)
+        with(newsAdapter) {
+            notifyDataSetChanged()
+        }
+        viewModel.getBreakNews(requireContext())
         //observer
         observeNews()
      }
@@ -80,7 +79,6 @@ class BreakingNewsFragment : Fragment() {
     }
     private fun showProgressBar() {
         binding.shimmerContainer.visibility = View.VISIBLE
-        //  binding.paginationProgressBar.visibility = View.VISIBLE
         isLoading = true
     }
 
@@ -155,7 +153,7 @@ class BreakingNewsFragment : Fragment() {
                     && isTotalMoreThanVisible && isScrolling
 
             if (shouldPaginate) {
-                viewModel.getBreakNews(countryCode)
+                viewModel.getBreakNews(requireContext())
                 isScrolling = false
             }
         }
