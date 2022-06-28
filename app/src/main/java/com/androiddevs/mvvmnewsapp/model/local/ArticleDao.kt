@@ -7,7 +7,7 @@ import com.androiddevs.mvvmnewsapp.model.dataClass.Article
 @Dao
 interface ArticleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsert(article: Article):Long
+    suspend fun insert(article: Article):Long
 
     @Query("SELECT * From articles")
     fun getAllArticles(): LiveData<List<Article>>

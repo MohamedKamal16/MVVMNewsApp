@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MVVMNewsApp</string>
+    <string name="searchEditText">بحث عن....</string>
+    <string name="article">مقال</string>
+    <string name="saved_news">الاخبار المسجله</string>
+    <string name="news">الاخبار</string>
+    <string name="chooselanguage">اختر لغه</string>
+    <string name="settings">الاعدادات</string>
+    <string name="language">اللغه</string>
+    <string name="country">اختر بلد</string>
+    <string name="home">الرئيسيه</string>
+    <string name="search_news">البحث</string>
+    <string name="choose_country">اختر بلد</string>
+</resources>

@@ -1,14 +1,16 @@
 package com.androiddevs.mvvmnewsapp.model.remote
 
+
+
 import com.androiddevs.mvvmnewsapp.util.Constant.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
-
+/*
+//use hilt instead
 class RetrofitInstance {
-
   companion object {
 
       //lazy mean we initialize it once
@@ -33,3 +35,4 @@ class RetrofitInstance {
   }
 
 }
+*/

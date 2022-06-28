@@ -1,38 +1,48 @@
 package com.androiddevs.mvvmnewsapp.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.androiddevs.mvvmnewsapp.R
-import com.androiddevs.mvvmnewsapp.adapter.NewsAdapter
-import com.androiddevs.mvvmnewsapp.ui.activity.NewsActivity
-import com.androiddevs.mvvmnewsapp.ui.activity.NewsViewModel
+import com.androiddevs.mvvmnewsapp.ui.adapter.NewsAdapter
+import com.androiddevs.mvvmnewsapp.databinding.FragmentSearchNewsBinding
+import com.androiddevs.mvvmnewsapp.ui.viewModel.NewsViewModel
+import com.androiddevs.mvvmnewsapp.ui.viewModel.SearchNewsFragmentViewModel
 import com.androiddevs.mvvmnewsapp.util.Resource
-import kotlinx.android.synthetic.main.fragment_breaking_news.*
-import kotlinx.android.synthetic.main.fragment_search_news.*
-import kotlinx.android.synthetic.main.fragment_search_news.paginationProgressBar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class SearchNewsFragment:Fragment(R.layout.fragment_search_news){
+@AndroidEntryPoint
+class SearchNewsFragment:Fragment(){
 
-    lateinit var viewModel: NewsViewModel
+    private val viewModel: SearchNewsFragmentViewModel by viewModels()
     lateinit var newsAdapter: NewsAdapter
+    private lateinit var binding: FragmentSearchNewsBinding
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSearchNewsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel=(activity as NewsActivity).viewModel
         setupRecyclerView()
 
         newsAdapter.SetOnItemClickListener {
@@ -46,7 +56,7 @@ class SearchNewsFragment:Fragment(R.layout.fragment_search_news){
 
         //Delay on search Request
         var job:Job?=null
-        etSearch.addTextChangedListener { editable->
+        binding.etSearch.addTextChangedListener { editable->
             job?.cancel()
             job= MainScope().launch {
                 delay(200L)
@@ -65,11 +75,11 @@ class SearchNewsFragment:Fragment(R.layout.fragment_search_news){
                 is Resource.Success -> {
                     hideProgressBar()
                     response.data?.let { newsResponse ->
-                        newsAdapter.differ.submitList(newsResponse.articles.toList())
-                        val totalPages =newsResponse.totalResults/ 20+2
+                        newsAdapter.differ.submitList(newsResponse.articles?.toList())
+                        val totalPages = newsResponse.totalResults!! / 20+2
                         isLastPage = viewModel.searchgNewsPage == totalPages
                         if (isLastPage){
-                            rvBreakingNews.setPadding(0, 0, 0, 0)
+                            binding.rvSearchNews.setPadding(0, 0, 0, 0)
                         }
                     }
                 }
@@ -88,11 +98,11 @@ class SearchNewsFragment:Fragment(R.layout.fragment_search_news){
     ///////////////////////////////////////////////
     //hide and show progressBar
     private fun hideProgressBar() {
-        paginationProgressBar.visibility=View.INVISIBLE
+        binding. paginationProgressBar.visibility=View.INVISIBLE
         isLoading=false
     }
     private fun showProgressBar() {
-        paginationProgressBar.visibility=View.VISIBLE
+        binding. paginationProgressBar.visibility=View.VISIBLE
         isLoading=true
     }
     ///////////////////////////////////////////////
@@ -124,7 +134,7 @@ class SearchNewsFragment:Fragment(R.layout.fragment_search_news){
                     && isTotalMoreThanVisible && isScrolling
 
             if (shouldPaginate) {
-                viewModel.searchNews(etSearch.text.toString())
+                viewModel.searchNews(binding.etSearch.text.toString())
                 isScrolling = false
             }
         }
@@ -136,7 +146,7 @@ class SearchNewsFragment:Fragment(R.layout.fragment_search_news){
     ///////////////////////////////////////////////
     private fun setupRecyclerView(){
         newsAdapter = NewsAdapter()
-        rvSearchNews.apply {
+        binding. rvSearchNews.apply {
             adapter=newsAdapter
             layoutManager= LinearLayoutManager(activity)
             addOnScrollListener(this@SearchNewsFragment.scrollListner)
