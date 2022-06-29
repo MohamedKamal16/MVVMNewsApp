@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/news_nav_graph"
-       app:startDestination="@id/homePage">
+    app:startDestination="@id/allNewsFragment">
 
     <fragment
-        android:id="@+id/homePage"
-        android:name="com.androiddevs.mvvmnewsapp.ui.fragment.BreakingNewsFragment"
-        android:label="BreakingNewsFragment" >
+        android:id="@+id/breakingNewsFragment"
+        android:name="com.androiddevs.mvvmnewsapp.ui.fragment.BreakingNewsFragment">
         <action
             android:id="@+id/action_breakingNewsFragment_to_articleFragment"
             app:destination="@id/articleFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/savedNewsFragment"
         android:name="com.androiddevs.mvvmnewsapp.ui.fragment.SavedNewsFragment"
-        android:label="SavedNewsFragment" >
+        android:label="SavedNewsFragment">
         <action
             android:id="@+id/action_savedNewsFragment_to_articleFragment"
             app:destination="@id/articleFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_savedNewsFragment_to_settingFragment"
             app:destination="@id/settingFragment" />
@@ -35,19 +34,19 @@
     <fragment
         android:id="@+id/searchNewsFragment"
         android:name="com.androiddevs.mvvmnewsapp.ui.fragment.SearchNewsFragment"
-        android:label="SearchNewsFragment" >
+        android:label="SearchNewsFragment">
         <action
             android:id="@+id/action_searchNewsFragment_to_articleFragment"
             app:destination="@id/articleFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/articleFragment"
         android:name="com.androiddevs.mvvmnewsapp.ui.fragment.ArticleFragment"
-        android:label="ArticleFragment" >
+        android:label="ArticleFragment">
         <argument
             android:name="article"
             app:argType="com.androiddevs.mvvmnewsapp.model.dataClass.Article" />
@@ -57,4 +56,16 @@
         android:name="com.androiddevs.mvvmnewsapp.ui.fragment.SettingFragment"
         android:label="setting_fragment"
         tools:layout="@layout/setting_fragment" />
+    <fragment
+        android:id="@+id/allNewsFragment"
+        android:name="com.androiddevs.mvvmnewsapp.ui.fragment.AllNewsFragment"
+        android:label="homePage"
+        tools:layout="@layout/all_news_fragment">
+        <action
+            android:id="@+id/action_allNewsFragment_to_homePage"
+            app:destination="@id/breakingNewsFragment" />
+        <action
+            android:id="@+id/action_allNewsFragment_to_articleFragment"
+            app:destination="@id/articleFragment" />
+    </fragment>
 </navigation>

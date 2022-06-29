@@ -12,4 +12,13 @@
     <string name="home">الرئيسيه</string>
     <string name="search_news">البحث</string>
     <string name="choose_country">اختر بلد</string>
+    <string name="egypt">مصر</string>
+    <string name="usa">الولايات المتحده الامريكيه</string>
+    <string name="business">اعمال</string>
+    <string name="entertainment">ترفيه</string>
+    <string name="health">صحه</string>
+    <string name="sports">رياضه</string>
+    <string name="science">علوم</string>
+    <string name="technology">تكنولوجيا</string>
+    <string name="breaking_news">الاخبار العاجله</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.androiddevs.mvvmnewsapp.ui.fragment
 
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,12 +17,13 @@ import com.androiddevs.mvvmnewsapp.databinding.SettingFragmentBinding
 import com.androiddevs.mvvmnewsapp.ui.activity.NewsActivity
 import com.androiddevs.mvvmnewsapp.ui.adapter.CountryAdapter
 import com.androiddevs.mvvmnewsapp.ui.viewModel.SettingViewModel
-import com.androiddevs.mvvmnewsapp.util.Constant.countryList
-import com.androiddevs.mvvmnewsapp.util.LocaleHelper.getLanguage
+import com.androiddevs.mvvmnewsapp.util.CountrySelect.countryList
 import com.androiddevs.mvvmnewsapp.util.LocaleHelper.getSharedPreference
+import com.androiddevs.mvvmnewsapp.util.LocaleHelper.languageList
+import com.androiddevs.mvvmnewsapp.util.LocaleHelper.localLanguageCode
+import com.androiddevs.mvvmnewsapp.util.LocaleHelper.returnLanguageIndex
 import com.androiddevs.mvvmnewsapp.util.LocaleHelper.setLocale
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingFragment : Fragment() {
@@ -77,11 +77,10 @@ class SettingFragment : Fragment() {
            alertDialog=builder.create()
            setupRecyclerView(alertDialog)
            alertDialog.show()
-
        }
 
        private fun setupRecyclerView(dialog: AlertDialog) {
-           countryAdapter = CountryAdapter(countryList(),getSharedPreference(requireContext()), dialog,activity)
+           countryAdapter = CountryAdapter(countryList(requireContext()),getSharedPreference(requireContext()), dialog,activity)
            rec.apply {
                adapter = countryAdapter
                layoutManager = LinearLayoutManager(activity)
@@ -89,28 +88,15 @@ class SettingFragment : Fragment() {
        }
 
     private fun showChangeLang() {
-        val listItems = arrayOf("English","عربي")
-        val lang=getLanguage(requireContext())
-
-        selectedLanguageIndex = if (lang=="ar"){
-                                    1
-                                }else{
-                                    0
-                                }
+        selectedLanguageIndex = returnLanguageIndex(requireContext())
 
         val mBuilder = AlertDialog.Builder(requireContext())
         mBuilder.setTitle(getString(R.string.chooselanguage))
 
-        mBuilder.setSingleChoiceItems(listItems, selectedLanguageIndex) { dialog, index ->
-            val lang =when(index){
-                0->"en"
-                1->"ar"
-                else->"en"
-            }
-           setLocale(requireContext(),lang)
+        mBuilder.setSingleChoiceItems(languageList(), selectedLanguageIndex) { dialog, index ->
+           setLocale(requireContext(),localLanguageCode(index))
             dialog.dismiss()
             refresh()
-
         }
         val mDialog = mBuilder.create()
         mDialog.show()

@@ -8,10 +8,30 @@ import java.util.*
 
 
 object LocaleHelper {
+    //control language code
+    fun languageList(): Array<String> {//fun that add language to dialog
+        return arrayOf("English", "عربي")
+    }
+    fun localLanguageCode(index:Int):String{
+        val language =when(index){
+            0->"en"
+            1->"ar"
+            else->"en"
+        }
+        return language
+    }
+    fun returnLanguageIndex(context: Context):Int{
+    return when(getLanguage(context)){
+        "ar"->1
+        "en"->0
+        else->-1
+        }
+    }
 
+
+    //SharedPreference Code
     const val SHARED_PREFERENCES_NAME="pref"
     const val CHOOSE_LANGUAGE="CHOOSE_LANGUAGE"
-
     fun getSharedPreference(context: Context): SharedPreferences {
         return context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
     }

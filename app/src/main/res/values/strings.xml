@@ -14,4 +14,13 @@
     <string name="saved_news">SavedNews</string>
     <string name="search_news">SearchNews</string>
     <string name="choose_country">Choose Country</string>
+    <string name="egypt">EGYPT</string>
+    <string name="usa">USA</string>
+    <string name="business">Business</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="health">Health</string>
+    <string name="sports">Sports</string>
+    <string name="science">Science</string>
+    <string name="technology">Technology</string>
+    <string name="breaking_news">Breaking News</string>
 </resources>

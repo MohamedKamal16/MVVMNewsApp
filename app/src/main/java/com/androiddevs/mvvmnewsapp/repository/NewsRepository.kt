@@ -19,12 +19,12 @@ class NewsRepository @Inject constructor(
 
 
 
-    suspend fun getNews(country:String,category:String,pageNumber: Int)
+    suspend fun getNews(country:String?,category:String?,pageNumber: Int)
             = api.getNews(country,category, pageNumber)
 
 
-    suspend fun getBreakingNews(country:String?,pageNumber: Int)
-                = api.getBreakingNews(country, pageNumber)
+    suspend fun getBreakingNews(country:String?,pageSize: Int)
+                = api.getBreakingNews(country, pageSize)
 
     suspend fun searchNews(searchQuarry:String, pageNumber:Int)
             =api.searchForNews(searchQuarry/*,pageNumber*/)

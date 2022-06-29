@@ -40,7 +40,9 @@ class NewsActivity : AppCompatActivity() {
         navController = findNavController(R.id.newsNavHostFragment)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.articleFragment) {
+            if (destination.id == R.id.articleFragment
+                ||destination.id == R.id.settingFragment
+                ||destination.id==R.id.breakingNewsFragment) {
                 binding.navView.visibility = View.GONE
             } else {
                 binding.navView.visibility = View.VISIBLE
