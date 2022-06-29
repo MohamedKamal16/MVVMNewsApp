@@ -1,6 +1,5 @@
 package com.androiddevs.mvvmnewsapp.ui.adapter
 
-import android.app.Activity
 import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.androiddevs.mvvmnewsapp.databinding.ItemCountryBinding
 import com.androiddevs.mvvmnewsapp.model.dataClass.CountryCategory
 import com.androiddevs.mvvmnewsapp.ui.activity.NewsActivity
-import com.androiddevs.mvvmnewsapp.util.Constant.COUNTRY_NAME_ISO
+import com.androiddevs.mvvmnewsapp.util.CountrySelect.COUNTRY_NAME_ISO
 
-class CountryAdapter(val countries:List<CountryCategory>,val sharedPreferences: SharedPreferences,val dialog: AlertDialog,val activity: FragmentActivity?) :RecyclerView.Adapter<CountryAdapter.ArticleViewHolder>() {
+class CountryAdapter(private val countries:List<CountryCategory>, private val sharedPreferences: SharedPreferences, private val dialog: AlertDialog, val activity: FragmentActivity?) :RecyclerView.Adapter<CountryAdapter.ArticleViewHolder>() {
 
     inner class ArticleViewHolder(val binding: ItemCountryBinding):RecyclerView.ViewHolder(binding.root)
 
@@ -28,7 +27,7 @@ class CountryAdapter(val countries:List<CountryCategory>,val sharedPreferences: 
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
         holder.binding.apply {
-           tvCountryName.text=countries[position].name + "(${countries[position].countryISo})"
+           tvCountryName.text=countries[position].name
             imgCountry.setImageResource(countries[position].image)
         }
 

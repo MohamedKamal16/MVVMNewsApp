@@ -17,15 +17,5 @@ object Constant {
 
 
 
-    const val COUNTRY_NAME_ISO="COUNTRY_NAME_ISO"
-    fun getCountryCode(context:Context):String{
-      return  getSharedPreference(context).getString(COUNTRY_NAME_ISO,"eg").toString()
-    }
-    fun countryList():List<CountryCategory>{//Add more country to category
-        val countries= arrayListOf<CountryCategory>()
-        countries.add(CountryCategory("EGYPT", R.drawable.egypt,"eg"))
-        countries.add(CountryCategory("USA", R.drawable.usa,"us"))
-        return countries
-    }
 
 }

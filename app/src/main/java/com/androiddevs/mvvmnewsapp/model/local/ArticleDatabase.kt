@@ -11,6 +11,7 @@ import com.androiddevs.mvvmnewsapp.model.local.typeConverter.Converters
     version = 1,
     exportSchema = false
 )
+
 @TypeConverters(Converters::class)
 abstract class ArticleDatabase :RoomDatabase() {
     abstract fun  getArticleDao():ArticleDao

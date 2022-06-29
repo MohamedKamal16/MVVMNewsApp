@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.androiddevs.mvvmnewsapp.R
 import com.androiddevs.mvvmnewsapp.ui.adapter.NewsAdapter
 import com.androiddevs.mvvmnewsapp.databinding.FragmentSearchNewsBinding
-import com.androiddevs.mvvmnewsapp.ui.viewModel.NewsViewModel
 import com.androiddevs.mvvmnewsapp.ui.viewModel.SearchNewsFragmentViewModel
 import com.androiddevs.mvvmnewsapp.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,6 +43,26 @@ class SearchNewsFragment:Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
+        //Delay on search Request
+        var job:Job?=null
+        with(binding){
+            binding.clear.setOnClickListener {
+                etSearch.text.clear()
+            }
+
+            binding.etSearch.addTextChangedListener { editable->
+                job?.cancel()
+                job= MainScope().launch {
+                    delay(200L)
+                    editable?.let {
+                        if (editable.toString().isNotEmpty()){
+                            viewModel.searchNews(editable.toString())
+                        }
+                    }
+                }
+
+            }
+        }
 
         newsAdapter.SetOnItemClickListener {
             val bundle=Bundle().apply {
@@ -54,20 +73,6 @@ class SearchNewsFragment:Fragment(){
             )
         }
 
-        //Delay on search Request
-        var job:Job?=null
-        binding.etSearch.addTextChangedListener { editable->
-            job?.cancel()
-            job= MainScope().launch {
-                delay(200L)
-                editable?.let {
-                    if (editable.toString().isNotEmpty()){
-                        viewModel.searchNews(editable.toString())
-                    }
-                }
-            }
-
-        }
 
         //observer
         viewModel.searchNews.observe(viewLifecycleOwner, Observer { response ->
@@ -86,7 +91,7 @@ class SearchNewsFragment:Fragment(){
                 is Resource.Error -> {
                     hideProgressBar()
                     response.message?.let { message ->
-                        Toast.makeText(activity, "An error occured:$message", Toast.LENGTH_LONG).show()
+                        Toast.makeText(activity, "An error occurred:$message", Toast.LENGTH_LONG).show()
                     }
                 }
                 is Resource.Loading -> {

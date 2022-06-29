@@ -1,6 +1,5 @@
 package com.androiddevs.mvvmnewsapp.ui.fragment
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,11 +16,10 @@ import com.androiddevs.mvvmnewsapp.R
 import com.androiddevs.mvvmnewsapp.ui.adapter.NewsAdapter
 import com.androiddevs.mvvmnewsapp.databinding.FragmentBreakingNewsBinding
 import com.androiddevs.mvvmnewsapp.ui.viewModel.NewsViewModel
-import com.androiddevs.mvvmnewsapp.util.Constant
-import com.androiddevs.mvvmnewsapp.util.Constant.getCountryCode
+import com.androiddevs.mvvmnewsapp.util.CountrySelect.getCountryCode
+import com.androiddevs.mvvmnewsapp.util.NewsSelect.NEWS_Category
 import com.androiddevs.mvvmnewsapp.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class BreakingNewsFragment : Fragment() {
@@ -29,7 +27,7 @@ class BreakingNewsFragment : Fragment() {
     private val viewModel: NewsViewModel by viewModels()
     private lateinit var newsAdapter: NewsAdapter
     private lateinit var binding: FragmentBreakingNewsBinding
-
+    lateinit var category: String
 
 
     override fun onCreateView(
@@ -44,6 +42,7 @@ class BreakingNewsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        category= arguments?.getString(NEWS_Category,"general").toString()
 
         setupRecyclerView()
         with(binding) {
@@ -66,7 +65,7 @@ class BreakingNewsFragment : Fragment() {
         with(newsAdapter) {
             notifyDataSetChanged()
         }
-        viewModel.getBreakNews(requireContext())
+        viewModel.getBreakNews(getCountryCode(requireContext()),category)
         //observer
         observeNews()
      }
@@ -74,7 +73,7 @@ class BreakingNewsFragment : Fragment() {
 
     //hide and show progressBar
     private fun hideProgressBar() {
-        binding.shimmerContainer.visibility = View.GONE
+       binding.shimmerContainer.visibility = View.GONE
         isLoading = false
     }
     private fun showProgressBar() {
@@ -94,7 +93,7 @@ class BreakingNewsFragment : Fragment() {
     }
 
     private fun observeNews() {
-        viewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
+        viewModel.news.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
@@ -104,7 +103,7 @@ class BreakingNewsFragment : Fragment() {
 
                         if (newsResponse.totalResults != null) {
                             val totalPages = newsResponse.totalResults / 20 + 2
-                            isLastPage = viewModel.breakingNewsPage == totalPages
+                            isLastPage = viewModel.newsPage == totalPages
                         }
 
                         if (isLastPage) {
@@ -153,7 +152,7 @@ class BreakingNewsFragment : Fragment() {
                     && isTotalMoreThanVisible && isScrolling
 
             if (shouldPaginate) {
-                viewModel.getBreakNews(requireContext())
+                viewModel.getBreakNews(getCountryCode(requireContext()),category)
                 isScrolling = false
             }
         }

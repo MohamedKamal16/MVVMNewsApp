@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.androiddevs.mvvmnewsapp.R
 import com.androiddevs.mvvmnewsapp.ui.adapter.NewsAdapter
 import com.androiddevs.mvvmnewsapp.databinding.FragmentSavedNewsBinding
-import com.androiddevs.mvvmnewsapp.ui.viewModel.NewsViewModel
 import com.androiddevs.mvvmnewsapp.ui.viewModel.SavedNewsFragmentViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint

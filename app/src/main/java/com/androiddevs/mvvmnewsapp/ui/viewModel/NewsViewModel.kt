@@ -1,17 +1,10 @@
 package com.androiddevs.mvvmnewsapp.ui.viewModel
 
 import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
-import android.net.ConnectivityManager.*
-import android.net.NetworkCapabilities.*
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.androiddevs.mvvmnewsapp.model.dataClass.Article
 import com.androiddevs.mvvmnewsapp.model.dataClass.NewsResponse
 import com.androiddevs.mvvmnewsapp.repository.NewsRepository
-import com.androiddevs.mvvmnewsapp.util.Constant
-import com.androiddevs.mvvmnewsapp.util.Constant.COUNTRY_NAME_ISO
 import com.androiddevs.mvvmnewsapp.util.NetworkCheck.hasInternetConnection
 import com.androiddevs.mvvmnewsapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,57 +18,53 @@ class NewsViewModel @Inject constructor(
     private val newsRepository: NewsRepository,
     application: Application,
 ) : BaseViewModel(application) {
-    //LiveData
-    val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
-    var breakingNewsPage = 1
-    var breakingNewsResponse: NewsResponse? = null
+    val news: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
+    var newsPage = 1
+    var newsResponse: NewsResponse? = null
 
 
-
-
-    fun getBreakNews(context: Context) = viewModelScope.launch {
-        safeBrakingNewsCall(Constant.getCountryCode(context))
-    }
-
-
-    //handle Breakresponse case success or not
-    private fun handleBreakingNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse> {
+    private fun handleNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse> {
         if (response.isSuccessful) {
-            response.body()?.let { resultResponce ->
-                breakingNewsPage++
-                if (breakingNewsResponse == null) {
-                    breakingNewsResponse = resultResponce
+            response.body()?.let {resultResponse->
+                newsPage++
+                if (newsResponse == null) {
+                    newsResponse = resultResponse
                 } else {
-                    val oldArticle = breakingNewsResponse?.articles
-                    val newArticle = resultResponce.articles
-                    if (newArticle != null) {
+                    val oldArticle = newsResponse?.articles
+                    val newArticle = resultResponse.articles
+                    //here check control country and catagory TODO
+                    if (newArticle != null ) {
                         oldArticle?.addAll(newArticle)
                     }
                 }
-                return Resource.Success(breakingNewsResponse ?: resultResponce)
+                return Resource.Success(newsResponse ?: resultResponse)
             }
         }
         return Resource.Error(response.message())
     }
 
-    private suspend fun safeBrakingNewsCall(countryCode:String?) {
-        breakingNews.postValue(Resource.Loading())
+    private suspend fun safeNewsCall(countryCode:String?,category:String?) {
+        news.postValue(Resource.Loading())
         try {
             if (hasInternetConnection(context)) {
                 //use call method
-                val response = newsRepository.getBreakingNews(countryCode,breakingNewsPage)
+                val response = newsRepository.getNews(countryCode,category,newsPage)
                 //post data in mutable live data
-                breakingNews.postValue(handleBreakingNewsResponse(response))
+                news.postValue(handleNewsResponse(response))
             } else {
-                breakingNews.postValue(Resource.Error("NO INTERNET CONNECTION"))
+                news.postValue(Resource.Error("NO INTERNET CONNECTION"))
             }
         } catch (t: Throwable) {
             when (t) {
-                is IOException -> breakingNews.postValue(Resource.Error("NETWORK FAILURE"))
-                else -> breakingNews.postValue(Resource.Error("CONVERSION ERROR"))
+                is IOException -> news.postValue(Resource.Error("NETWORK FAILURE"))
+                else -> news.postValue(Resource.Error("CONVERSION ERROR"))
             }
 
         }
+    }
+
+    fun getBreakNews(countryCode:String?,category:String?) = viewModelScope.launch {
+        safeNewsCall(countryCode,category)
     }
 
 }

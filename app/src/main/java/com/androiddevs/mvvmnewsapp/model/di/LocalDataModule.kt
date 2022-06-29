@@ -31,11 +31,7 @@ object LocalDataModule {
     @Provides
     fun provideRunDao(db: ArticleDatabase) = db.getArticleDao()
 
- /*   @Singleton
-    @Provides
-    fun provideSharedPreferences(@ApplicationContext app: Context)=app.getSharedPreferences(SHARED_PREFERENCES_NAME,
-        Context.MODE_PRIVATE
-    )*/
+
 
 
 

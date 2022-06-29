@@ -2,6 +2,8 @@ package com.androiddevs.mvvmnewsapp.model.dataClass
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.androiddevs.mvvmnewsapp.model.local.typeConverter.Converters
 import java.io.Serializable
 
 @Entity(
