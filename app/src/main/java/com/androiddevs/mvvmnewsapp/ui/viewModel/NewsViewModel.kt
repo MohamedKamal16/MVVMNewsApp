@@ -32,7 +32,6 @@ class NewsViewModel @Inject constructor(
                 } else {
                     val oldArticle = newsResponse?.articles
                     val newArticle = resultResponse.articles
-                    //here check control country and catagory TODO
                     if (newArticle != null ) {
                         oldArticle?.addAll(newArticle)
                     }

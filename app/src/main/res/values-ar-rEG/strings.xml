@@ -21,4 +21,6 @@
     <string name="science">علوم</string>
     <string name="technology">تكنولوجيا</string>
     <string name="breaking_news">الاخبار العاجله</string>
+    <string name="welcome_to_news_app">مرحبا بك في برنامج الاخبار</string>
+    <string name="please_choose_language_and_country">من فضلك اختر لغه البرنامج والبلد</string>
 </resources>
