@@ -26,10 +26,14 @@ class NewsAdapter() :RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
      val article=differ.currentList[position]
 
         holder.binding.apply {
-            if (article.urlToImage != null)
-               Glide.with(ivArticleImage.context).load(article.urlToImage).into(ivArticleImage)
-            else
-                Glide.with(ivArticleImage.context).load(R.drawable.ic_baseline_error_24).into(ivArticleImage)
+
+        /*    if (article.urlToImage == null){
+               ivArticleImage.setImageResource(R.drawable.ic_baseline_error_24)
+            }*/
+            Glide.with(ivArticleImage.context)
+                .load(article.urlToImage)
+                .error(R.drawable.ic_baseline_error_24)
+                .into(ivArticleImage)
 
             tvSource.text=article.source?.name
             tvTitle.text=article.title

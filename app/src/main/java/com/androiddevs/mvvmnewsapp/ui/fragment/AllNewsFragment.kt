@@ -58,11 +58,7 @@ class AllNewsFragment : Fragment() {
         viewModel.getBreakNews(requireContext())
         //observer
         observeNews()
-        Log.w("Test","onViewCreated")
-    }
-
-    override fun onResume() {
-        super.onResume()
+        clickOnArticle()
     }
 
 
@@ -83,7 +79,7 @@ class AllNewsFragment : Fragment() {
                 putSerializable("article", it)
             }
             findNavController().navigate(
-                R.id.action_breakingNewsFragment_to_articleFragment, bundle
+                R.id.articleFragment, bundle
             )
         }
     }
