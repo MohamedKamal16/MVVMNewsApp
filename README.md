@@ -13,3 +13,14 @@ Technology used:
 3.NEWS REST API(https://newsapi.org/)
 
 4.Livedata
+
+5.Hilt
+
+5.Glide
+
+6.Navigation Component
+
+7.LiveData
+
+8.Coroutine
+
