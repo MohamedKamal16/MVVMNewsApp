@@ -24,12 +24,8 @@ class NewsAdapter() :RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
      val article=differ.currentList[position]
-
+/*Try*/
         holder.binding.apply {
-
-        /*    if (article.urlToImage == null){
-               ivArticleImage.setImageResource(R.drawable.ic_baseline_error_24)
-            }*/
             Glide.with(ivArticleImage.context)
                 .load(article.urlToImage)
                 .error(R.drawable.ic_baseline_error_24)
