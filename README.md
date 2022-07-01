@@ -1,8 +1,15 @@
-# MVVMNewsApp
-/* YOUTUPE TUTORIAL ( Philipp Lackner ) 
-https://www.youtube.com/watch?v=asuOWE5KuFM&list=PLQkwcJG4YTCRF8XiCRESq1IFFW8COlxYJ */ 
+# NewsApp
 
-Show NEWs and allow user to save favorite news
+•	User can see Breaking News
+
+•	User can see News on each category
+
+•	User can add article to favorite
+
+•	User can choose country that want to see its News
+
+•	User can change app language
+
 
 Technology used:
 ===============
