@@ -1,8 +1,7 @@
 package com.androiddevs.mvvmnewsapp.repository
 
 
-import android.content.Context
-import android.content.SharedPreferences
+
 import com.androiddevs.mvvmnewsapp.model.dataClass.Article
 import com.androiddevs.mvvmnewsapp.model.local.ArticleDao
 import com.androiddevs.mvvmnewsapp.model.remote.NewsApi
@@ -13,11 +12,6 @@ class NewsRepository @Inject constructor(
    private val articleDao: ArticleDao,
    private val api: NewsApi,
     ) {
-     private var countryCode:String?=null
-
-    lateinit var Category:String
-
-
 
     suspend fun getNews(country:String?,category:String?,pageNumber: Int)
             = api.getNews(country,category, pageNumber)

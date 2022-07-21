@@ -46,20 +46,6 @@ class AllNewsViewModel @Inject constructor(
                         oldArticle?.clear()
                         oldArticle?.addAll(newArticle)
 
-                          /*  for (article in oldArticle!!) {
-                            for (newArticle in newArticle) {
-                                changeCountry = article.description != newArticle.description
-
-                            }
-                        }
-                            if (changeCountry){
-                                oldArticle.clear()
-                                oldArticle.addAll(newArticle)
-                            }else{
-                                oldArticle.addAll(newArticle)
-                            }*/
-
-
                     }
                 }
                 return Resource.Success(breakingNewsResponse ?: resultResponce)

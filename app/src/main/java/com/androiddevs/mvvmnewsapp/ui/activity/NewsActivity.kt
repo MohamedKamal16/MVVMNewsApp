@@ -21,9 +21,7 @@ class NewsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNewsBinding
     private lateinit var navController: NavController
 
-    private val viewModel: SettingViewModel by viewModels()
     lateinit var navView: BottomNavigationView
-    var index=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

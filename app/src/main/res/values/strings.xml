@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MVVMNewsApp</string>
+    <string name="app_name">NewsApp</string>
     <string name="searchEditText">Search...</string>
     <string name="article">Article</string>
     <string name="news">News</string>
@@ -23,4 +23,6 @@
     <string name="science">Science</string>
     <string name="technology">Technology</string>
     <string name="breaking_news">Breaking News</string>
+    <string name="deleteArticle">Successfully deleted article</string>
+    <string name="undo">Undo</string>
 </resources>
