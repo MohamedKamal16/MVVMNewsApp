@@ -10,7 +10,7 @@ object CountrySelect {
     const val COUNTRY_NAME_ISO="COUNTRY_NAME_ISO"
 
     fun getCountryCode(context: Context):String{
-        return  LocaleHelper.getSharedPreference(context).getString(COUNTRY_NAME_ISO,"eg").toString()
+        return  LocaleHelper.getSharedPreference(context).getString(COUNTRY_NAME_ISO,"us").toString()
     }
     fun countryList(context: Context):List<CountryCategory>{//Add more country to category
         val countries= arrayListOf<CountryCategory>()

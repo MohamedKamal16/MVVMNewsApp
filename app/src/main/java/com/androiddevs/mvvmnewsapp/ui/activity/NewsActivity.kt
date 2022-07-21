@@ -21,9 +21,7 @@ class NewsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNewsBinding
     private lateinit var navController: NavController
 
-    private val viewModel: SettingViewModel by viewModels()
     lateinit var navView: BottomNavigationView
-    var index=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +40,9 @@ class NewsActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.articleFragment
                 ||destination.id == R.id.settingFragment
-                ||destination.id==R.id.breakingNewsFragment) {
+                ||destination.id==R.id.breakingNewsFragment
+                ||destination.id==R.id.splashFragment
+                ||destination.id==R.id.viewPagerFragment) {
                 binding.navView.visibility = View.GONE
             } else {
                 binding.navView.visibility = View.VISIBLE

@@ -46,13 +46,11 @@ class BreakingNewsFragment : Fragment() {
 
         setupRecyclerView()
         with(binding) {
-            tvPageName.text = getString(R.string.news)//TODO change Name with category
+            tvPageName.text = getString(R.string.news)
             back.setOnClickListener {
                 findNavController().popBackStack()
             }
-            Setting.setOnClickListener {
-                findNavController().navigate(R.id.settingFragment)
-            }
+
         }
         //on click save article in bundle in byte(serialization) to pass it to article fragment
         clickOnArticle()
